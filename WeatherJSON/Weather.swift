@@ -32,7 +32,7 @@ struct Weather {
 
         guard let pressure = json["pressure"] as? Double else {throw SerializationError.missing("pressure is missing")}
         
-        guard let temperature = json["temperature"] as? Double else {throw SerializationError.missing("Temperature is missing")}
+        guard let temperature = json["temperatureMax"] as? Double else {throw SerializationError.missing("Temperature is missing")}
         
         
         
@@ -41,16 +41,17 @@ struct Weather {
         self.pressure = pressure
         self.temperature = temperature
         
+        
     }
     
     
-    static let apiBaseAdress = "https://api.darksky.net/forecast/d8d214e6919786840cff195857c3ad78/"
+    //static let apiBaseAdress = "https://api.darksky.net/forecast/d8d214e6919786840cff195857c3ad78/"
     
     
     // need to check @escaping
-    static func forecastWeather(location: String, completion: @escaping ([Weather]) -> ()) {
+    static func forecastWeather(completion: @escaping ([Weather]) -> ()) {
     
-        let url = apiBaseAdress + location
+        let url = "https://api.darksky.net/forecast/d8d214e6919786840cff195857c3ad78/54.0924200,18.7778700"
         let reguest = URLRequest(url: URL(string: url)!)
         
         let task = URLSession.shared.dataTask(with: reguest) { (data:Data?, response:URLResponse?, error:Error?) in
@@ -71,10 +72,11 @@ struct Weather {
                             
                                 for dataInJson in dailyData {
                                 
-                                    if let weatherData = try? Weather(json: dataInJson) {
+                                    if let weatherObject = try? Weather(json: dataInJson) {
                                     
-                                        weatherArray.append(weatherData)
-                                    
+                                        weatherArray.append(weatherObject)
+                                        
+                                        //print(weatherObject)
                                     }
                                     
                                 
@@ -89,27 +91,17 @@ struct Weather {
                 
                 
                 } catch {
-                
-                    
                         print(error)
-                
-                
                 }
-            
-                
-                        completion(weatherArray)
-            
-            
+
+                    completion(weatherArray)
             }
-            
-            
+         
             
         }
-        
     task.resume()
     
     }
-    
     
     
 }

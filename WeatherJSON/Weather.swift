@@ -21,6 +21,7 @@ struct Weather {
     }
    
     
+    
     // In case of wrong serialization throw an Serializaition error
     init(json:[String:Any]) throws {
     
@@ -36,16 +37,19 @@ struct Weather {
         
         
         
+        
         self.summary = summary
         self.icon = icon
         self.pressure = pressure
-        self.temperature = temperature
-        
+        self.temperature = (temperature - 32) / 1.8 // converted to Celsius
         
     }
     
     
     //static let apiBaseAdress = "https://api.darksky.net/forecast/d8d214e6919786840cff195857c3ad78/"
+    
+    
+    
     
     
     // need to check @escaping
@@ -76,7 +80,7 @@ struct Weather {
                                     
                                         weatherArray.append(weatherObject)
                                         
-                                        //print(weatherObject)
+                                        
                                     }
                                     
                                 
